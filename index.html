@@ -6,76 +6,93 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f2f2f2;
       margin: 0;
       padding: 0;
+      text-align: center;
     }
     header {
-      text-align: center;
       padding: 20px;
-      background-color: #4CAF50;
+      background-color: #0a2264;
+      color: white;
+      font-size: 2em;
+      text-shadow: 2px 2px #00000033;
+    }
+    h2 { margin-top:0; }
+
+    .ranking, .members {
+      border-radius: 15px;
+      padding: 15px;
+      margin: 10px auto;
+      max-width: 700px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    /* Rank cards */
+    .rank-card {
+      display: inline-block;
+      border-radius: 15px;
+      padding: 10px;
+      width: 120px;
+      margin: 0 10px;
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+      font-size: 0.9em;
       color: white;
     }
-    h1 { margin: 0; }
-    .ranking {
-      display: flex;
-      justify-content: center;
-      align-items: flex-end;
-      margin: 20px;
-      gap: 20px;
+    .rank-card:hover {
+      transform: scale(1.2) rotate(-5deg);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
     }
-    .rank-card {
-      text-align: center;
-      background: white;
-      padding: 10px;
-      border-radius: 10px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-      transition: transform 0.2s;
+    .rank-card img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      margin-bottom: 5px;
     }
-    .rank-card:hover { transform: scale(1.05); }
-    .rank-1 { height: 180px; background-color:#FFD700; }
-    .rank-2 { height: 140px; background-color:#C0C0C0; }
-    .rank-3 { height: 120px; background-color:#CD7F32; }
-    .rank-card img { width: 80px; height: 80px; border-radius: 50%; margin-bottom: 5px; }
-    .members {
-      max-width: 800px;
-      margin: 20px auto;
-      background: white;
-      padding: 15px;
-      border-radius: 10px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-    }
+
+    /* Member list */
     .member {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      padding: 5px 0;
-      border-bottom: 1px solid #ddd;
+      padding: 5px;
+      font-size: 0.9em;
+      transition: transform 0.2s, background 0.2s;
     }
-    .member:last-child { border-bottom: none; }
+    .member:hover {
+      background: #83e037;
+      transform: scale(1.02);
+    }
+
     .buttons button {
       margin-left: 5px;
-      padding: 2px 6px;
-      border-radius: 4px;
+      padding: 2px 5px;
+      border-radius: 5px;
       border: none;
       cursor: pointer;
+      transition: 0.2s;
     }
     .buttons button:hover { opacity: 0.8; }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Dashboard Canil 99</h1>
-  </header>
+  <header>🐶 Dashboard Canil 99 🐾</header>
 
-  <section class="ranking" id="top3">
-    <!-- Top 3 vão aparecer aqui -->
-  </section>
+  <!-- Seção Top 3 -->
+  <div style="background-color:#191a1a; padding:20px;">
+    <section class="ranking" id="top3"></section>
+  </div>
 
-  <section class="members" id="memberList">
-    <h2>Lista de Membros</h2>
-    <!-- Lista completa -->
-  </section>
+  <!-- Seção Lista de membros -->
+  <div style="background-color:#191a1a; padding:20px; color:white;">
+    <section class="members" id="memberList">
+      <h2>👥 Lista de Membros</h2>
+    </section>
+  </div>
+
+  <!-- Seção extra -->
+  <div style="background-color:#191a1a; padding:20px;">
+    <!-- Pode colocar estatísticas futuras aqui -->
+  </div>
 
   <script>
     let members = [
@@ -111,42 +128,46 @@
     function renderTop3() {
       const container = document.getElementById("top3");
       container.innerHTML = "";
+      let top = [...members].sort((a,b)=>b.pontos-a.pontos || a.faltas-b.faltas).slice(0,3);
 
-      let top = members
-        .filter(m => m.faltas === 0)
-        .sort((a,b) => b.pontos - a.pontos)
-        .slice(0,3);
-
-      const rankClasses = ["rank-2","rank-1","rank-3"];
-      top.forEach((m, i) => {
+      const colors = ["#ffa500","#C0C0C0","#CD7F32"]; // Cinza, Azul, Verde
+      top.forEach((m,i)=>{
         const card = document.createElement("div");
-        card.className = `rank-card ${rankClasses[i]}`;
+        card.className="rank-card";
+        card.style.backgroundColor = colors[i];
         card.innerHTML = `
+          <div>#${i+1}</div>
           <img src="https://placedog.net/80/80?random=${i}" alt="Doggo">
-          <div><strong>${m.ff}</strong></div>
-          <div>${m.yt}</div>
-          <div>${m.pontos} pts | Faltas: ${m.faltas}</div>
+          <div>🐾 <strong>${m.ff}</strong></div>
+          <div>🎥 ${m.yt}</div>
+          <div>⭐ ${m.pontos} pts | ❌ ${m.faltas} faltas</div>
         `;
         container.appendChild(card);
       });
+      return top;
     }
 
     function renderMembers() {
       const list = document.getElementById("memberList");
-      list.innerHTML = "<h2>Lista de Membros</h2>";
+      list.innerHTML = "<h2>👥 Lista de Membros</h2>";
+      let top3 = renderTop3();
+      let others = members.filter(m => !top3.includes(m));
+      others.sort((a,b)=>b.pontos-a.pontos || a.faltas-b.faltas);
 
-      members.forEach((m, index) => {
+      others.forEach((m,i)=>{
         const div = document.createElement("div");
-        div.className = "member";
+        div.className="member";
         div.innerHTML = `
-          <span>${m.ff} (${m.yt})</span>
-          <span>
-            ${m.pontos} pts | Faltas: ${m.faltas}
+          <span>#${i+4} 🐶 ${m.ff} (${m.yt})</span>
+          <span>⭐ ${m.pontos} | ❌ ${m.faltas}
             <span class="buttons">
-              <button onclick="addPoint(${index})">+P</button>
-              <button onclick="removePoint(${index})">-P</button>
-              <button onclick="addFalta(${index})">+F</button>
-              <button onclick="removeFalta(${index})">-F</button>
+              <button onclick="addPoint(${members.indexOf(m)})">+P</button>
+              <button onclick="removePoint(${members.indexOf(m)})">-P</button>
+              <button onclick="addFalta(${members.indexOf(m)})">+F</button>
+              <button onclick="removeFalta(${members.indexOf(m)})">-F</button>
+              <button onclick="editFF(${members.indexOf(m)})">✏️ FF</button>
+              <button onclick="editYT(${members.indexOf(m)})">✏️ YT</button>
+              <button onclick="removeMember(${members.indexOf(m)})">🗑️</button>
             </span>
           </span>
         `;
@@ -158,15 +179,25 @@
     function removePoint(i){ if(members[i].pontos>0) members[i].pontos--; updateDashboard(); }
     function addFalta(i){ members[i].faltas++; updateDashboard(); }
     function removeFalta(i){ if(members[i].faltas>0) members[i].faltas--; updateDashboard(); }
+    function editFF(i){ let newFF = prompt("Digite o novo nome do FF:", members[i].ff); if(newFF) members[i].ff=newFF; updateDashboard(); }
+    function editYT(i){ let newYT = prompt("Digite o novo nome do YouTube:", members[i].yt); if(newYT) members[i].yt=newYT; updateDashboard(); }
+    function removeMember(i){ if(confirm(`Remover ${members[i].ff}?`)){ members.splice(i,1); updateDashboard(); } }
+    function addMember(){ let ff=prompt("Nome FF do novo membro:"); let yt=prompt("Nome YouTube do novo membro:"); if(ff&&yt){ members.push({ff,yt,pontos:0,faltas:0}); updateDashboard(); } }
 
-    function updateDashboard() {
-      renderTop3();
-      renderMembers();
-      // Aqui você pode adicionar Local Storage se quiser salvar alterações
-    }
+    function updateDashboard(){ renderTop3(); renderMembers(); }
 
-    // Inicializa dashboard
+    // Inicializa
     updateDashboard();
+
+    // Botão fixo para adicionar membro
+    const addBtn = document.createElement("button");
+    addBtn.innerText = "➕ Adicionar Membro";
+    addBtn.style.padding = "10px 20px";
+    addBtn.style.margin = "10px";
+    addBtn.style.fontSize = "1em";
+    addBtn.style.cursor = "pointer";
+    addBtn.onclick = addMember;
+    document.body.insertBefore(addBtn, document.getElementById("top3"));
   </script>
 </body>
 </html>
