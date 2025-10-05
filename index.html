@@ -32,12 +32,13 @@
       display: inline-block;
       border-radius: 15px;
       padding: 10px;
-      width: 120px;
+      width: 140px;
       margin: 0 10px;
       transition: transform 0.3s, box-shadow 0.3s;
       cursor: pointer;
       font-size: 0.9em;
       color: white;
+      vertical-align: top;
     }
     .rank-card:hover {
       transform: scale(1.2) rotate(-5deg);
@@ -49,6 +50,17 @@
       border-radius: 50%;
       margin-bottom: 5px;
     }
+
+    .top-buttons button {
+      margin: 2px;
+      padding: 2px 5px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      transition: 0.2s;
+      font-size: 0.8em;
+    }
+    .top-buttons button:hover { opacity: 0.8; }
 
     /* Member list */
     .member {
@@ -89,10 +101,7 @@
     </section>
   </div>
 
-  <!-- Seção extra -->
-  <div style="background-color:#191a1a; padding:20px;">
-    <!-- Pode colocar estatísticas futuras aqui -->
-  </div>
+  <div style="background-color:#191a1a; padding:20px;"></div>
 
   <script>
     let members = [
@@ -129,8 +138,7 @@
       const container = document.getElementById("top3");
       container.innerHTML = "";
       let top = [...members].sort((a,b)=>b.pontos-a.pontos || a.faltas-b.faltas).slice(0,3);
-
-      const colors = ["#ffa500","#C0C0C0","#CD7F32"]; // Cinza, Azul, Verde
+      const colors = ["#ffa500","#C0C0C0","#CD7F32"]; // Ouro, Prata, Bronze
       top.forEach((m,i)=>{
         const card = document.createElement("div");
         card.className="rank-card";
@@ -141,6 +149,12 @@
           <div>🐾 <strong>${m.ff}</strong></div>
           <div>🎥 ${m.yt}</div>
           <div>⭐ ${m.pontos} pts | ❌ ${m.faltas} faltas</div>
+          <div class="top-buttons">
+            <button onclick="addPoint(${members.indexOf(m)})">+P</button>
+            <button onclick="removePoint(${members.indexOf(m)})">-P</button>
+            <button onclick="addFalta(${members.indexOf(m)})">+F</button>
+            <button onclick="removeFalta(${members.indexOf(m)})">-F</button>
+          </div>
         `;
         container.appendChild(card);
       });
@@ -189,15 +203,15 @@
     // Inicializa
     updateDashboard();
 
-    // Botão fixo para adicionar membro
+    // Botão fixo para adicionar membro NO FINAL
     const addBtn = document.createElement("button");
     addBtn.innerText = "➕ Adicionar Membro";
     addBtn.style.padding = "10px 20px";
-    addBtn.style.margin = "10px";
+    addBtn.style.margin = "20px";
     addBtn.style.fontSize = "1em";
     addBtn.style.cursor = "pointer";
     addBtn.onclick = addMember;
-    document.body.insertBefore(addBtn, document.getElementById("top3"));
+    document.body.appendChild(addBtn);
   </script>
 </body>
 </html>
