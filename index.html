@@ -1,185 +1,172 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<title>Dashboard Guilda Canil 99</title>
-<style>
-  body { font-family: Arial, sans-serif; margin: 0; display: flex; height: 100vh; }
-  .sidebar { width: 250px; background-color: #2c3e50; color: white; padding: 20px; box-sizing: border-box; }
-  .sidebar h2 { color: #ecf0f1; margin-bottom: 20px; }
-  .sidebar button { width: 100%; margin: 5px 0; padding: 10px; background-color: #34495e; color: white; border: none; border-radius: 5px; cursor: pointer; }
-  .sidebar button:hover { background-color: #1abc9c; }
-  .main { flex-grow: 1; background-color: #ecf0f1; padding: 20px; overflow-y: auto; }
-  h1 { margin-top: 0; color: #2c3e50; }
-  .panel { background-color: white; padding: 15px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 0 5px rgba(0,0,0,0.2); }
-  input, button { padding: 5px; margin: 5px 0; width: 100%; box-sizing: border-box; }
-  ul { list-style-type: none; padding: 0; }
-  li { padding: 5px 0; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center; }
-  li span { flex-grow: 1; }
-  li button { margin-left: 5px; width: auto; padding: 3px 6px; }
-  .points-0 { background-color: #f8d7da; }  /* vermelho claro */
-  .points-1 { background-color: #fff3cd; }  /* amarelo claro */
-  .points-3 { background-color: #d1ecf1; }  /* azul claro */
-  .points-5 { background-color: #d4edda; }  /* verde claro */
-</style>
+  <meta charset="UTF-8">
+  <title>Dashboard Canil 99</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      text-align: center;
+      padding: 20px;
+      background-color: #4CAF50;
+      color: white;
+    }
+    h1 { margin: 0; }
+    .ranking {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      margin: 20px;
+      gap: 20px;
+    }
+    .rank-card {
+      text-align: center;
+      background: white;
+      padding: 10px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+      transition: transform 0.2s;
+    }
+    .rank-card:hover { transform: scale(1.05); }
+    .rank-1 { height: 180px; background-color:#FFD700; }
+    .rank-2 { height: 140px; background-color:#C0C0C0; }
+    .rank-3 { height: 120px; background-color:#CD7F32; }
+    .rank-card img { width: 80px; height: 80px; border-radius: 50%; margin-bottom: 5px; }
+    .members {
+      max-width: 800px;
+      margin: 20px auto;
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    }
+    .member {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5px 0;
+      border-bottom: 1px solid #ddd;
+    }
+    .member:last-child { border-bottom: none; }
+    .buttons button {
+      margin-left: 5px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+    }
+    .buttons button:hover { opacity: 0.8; }
+  </style>
 </head>
 <body>
+  <header>
+    <h1>Dashboard Canil 99</h1>
+  </header>
 
-<div class="sidebar">
-  <h2>Menu Guilda</h2>
-  <button onclick="showPanel('list')">📜 Lista de membros</button>
-  <button onclick="showPanel('add')">➕ Adicionar membro</button>
-</div>
+  <section class="ranking" id="top3">
+    <!-- Top 3 vão aparecer aqui -->
+  </section>
 
-<div class="main">
-  <h1>🐾 Dashboard Guilda Canil 99 🐾</h1>
-
-  <!-- Painel Adicionar Membro -->
-  <div class="panel" id="addPanel" style="display:none;">
-    <h2>Adicionar Membro</h2>
-    <input type="text" id="youtube" placeholder="Nome no YouTube">
-    <input type="text" id="ff" placeholder="Nome no Free Fire">
-    <button onclick="addMember()">Adicionar</button>
-  </div>
-
-  <!-- Painel Lista de Membros -->
-  <div class="panel" id="listPanel">
+  <section class="members" id="memberList">
     <h2>Lista de Membros</h2>
-    <ul id="membersList"></ul>
-    <button onclick="resetPoints()">Zerar pontos e faltas</button>
-    <button onclick="exportData()">💾 Exportar dados</button>
-    <input type="file" id="importFile" style="margin-top:10px;">
-    <button onclick="importData()">📂 Importar dados</button>
-  </div>
-</div>
+    <!-- Lista completa -->
+  </section>
 
-<script>
-  // Inicializar membros do Local Storage ou usar padrão
-  let members = JSON.parse(localStorage.getItem("guildaMembers")) || [
-    {ff:"jorgin", yt:"jorgin", pontos:4, faltas:0},
-    {ff:"Espanca veia", yt:"MK Fivem", pontos:3, faltas:0},
-    {ff:"Coringa", yt:"tiago", pontos:3, faltas:0},
-    {ff:"Warlinxt", yt:"warley felipe", pontos:4, faltas:0},
-    {ff:"Drackz", yt:"C99 drackz", pontos:3, faltas:0},
-    {ff:"26", yt:"Diego26", pontos:4, faltas:0},
-    {ff:"Henzao", yt:"henzo", pontos:2, faltas:0},
-    {ff:"Rochazx", yt:"Rochazx13", pontos:4, faltas:0},
-    {ff:"Bieuh N1", yt:"Sr Been", pontos:4, faltas:0},
-    {ff:"enrico", yt:"henriqrwz", pontos:4, faltas:0},
-    {ff:"kennedy", yt:"kennedy", pontos:3, faltas:0},
-    {ff:"DN 99", yt:"Dn 99", pontos:3, faltas:0},
-    {ff:"finest", yt:"finest", pontos:2, faltas:0},
-    {ff:"Duzin 244", yt:"jose", pontos:2, faltas:0},
-    {ff:"nome japones", yt:"dgking", pontos:1, faltas:0},
-    {ff:"mestre", yt:"felipe ytb", pontos:1, faltas:0},
-    {ff:"Mano nj11", yt:"muleke de vila", pontos:2, faltas:0},
-    {ff:"Hades", yt:"felippe", pontos:2, faltas:0},
-    {ff:"skaltz", yt:"skalt7x", pontos:2, faltas:0},
-    {ff:"maranha", yt:"rhuan", pontos:2, faltas:0},
-    {ff:"fx anderson", yt:"anderson", pontos:1, faltas:0},
-    {ff:"jpzin", yt:"pedro", pontos:1, faltas:0},
-    {ff:"soares", yt:"luan", pontos:1, faltas:0},
-    {ff:"henry", yt:"emerson", pontos:1, faltas:0},
-    {ff:"p.henry", yt:"henry", pontos:1, faltas:0},
-    {ff:"negrini", yt:"negrini", pontos:1, faltas:0},
-    {ff:"Br trem", yt:"trem bala", pontos:1, faltas:0}
-  ];
+  <script>
+    let members = [
+      {ff:"jorgin", yt:"jorgin", pontos:4, faltas:0},
+      {ff:"Espanca veia", yt:"MK Fivem", pontos:3, faltas:0},
+      {ff:"Coringa", yt:"tiago", pontos:3, faltas:0},
+      {ff:"Warlinxt", yt:"warley felipe", pontos:4, faltas:0},
+      {ff:"Drackz", yt:"C99 drackz", pontos:3, faltas:0},
+      {ff:"26", yt:"Diego26", pontos:4, faltas:0},
+      {ff:"Henzao", yt:"henzo", pontos:2, faltas:0},
+      {ff:"Rochazx", yt:"Rochazx13", pontos:4, faltas:0},
+      {ff:"Bieuh N1", yt:"Sr Been", pontos:4, faltas:0},
+      {ff:"enrico", yt:"henriqrwz", pontos:4, faltas:0},
+      {ff:"kennedy", yt:"kennedy", pontos:3, faltas:0},
+      {ff:"DN 99", yt:"Dn 99", pontos:3, faltas:0},
+      {ff:"finest", yt:"finest", pontos:2, faltas:0},
+      {ff:"Duzin 244", yt:"jose", pontos:2, faltas:0},
+      {ff:"nome japones", yt:"dgking", pontos:1, faltas:0},
+      {ff:"mestre", yt:"felipe ytb", pontos:1, faltas:0},
+      {ff:"Mano nj11", yt:"muleke de vila", pontos:2, faltas:0},
+      {ff:"Hades", yt:"felippe", pontos:2, faltas:0},
+      {ff:"skaltz", yt:"skalt7x", pontos:2, faltas:0},
+      {ff:"maranha", yt:"rhuan", pontos:2, faltas:0},
+      {ff:"fx anderson", yt:"anderson", pontos:1, faltas:0},
+      {ff:"jpzin", yt:"pedro", pontos:1, faltas:0},
+      {ff:"soares", yt:"luan", pontos:1, faltas:0},
+      {ff:"henry", yt:"emerson", pontos:1, faltas:0},
+      {ff:"p.henry", yt:"henry", pontos:1, faltas:0},
+      {ff:"negrini", yt:"negrini", pontos:1, faltas:0},
+      {ff:"Br trem", yt:"trem bala", pontos:1, faltas:0}
+    ];
 
-  function saveData() {
-    localStorage.setItem("guildaMembers", JSON.stringify(members));
-  }
+    function renderTop3() {
+      const container = document.getElementById("top3");
+      container.innerHTML = "";
 
-  function showPanel(panel) {
-    document.getElementById("addPanel").style.display = panel === 'add' ? 'block' : 'none';
-    document.getElementById("listPanel").style.display = panel === 'list' ? 'block' : 'none';
-  }
+      let top = members
+        .filter(m => m.faltas === 0)
+        .sort((a,b) => b.pontos - a.pontos)
+        .slice(0,3);
 
-  function renderList() {
-    const list = document.getElementById("membersList");
-    list.innerHTML = "";
-    members.sort((a,b) => b.pontos - a.pontos);
-
-    members.forEach((m, index) => {
-      let li = document.createElement("li");
-      let className = m.pontos >=5 ? "points-5" :
-                      m.pontos >=3 ? "points-3" :
-                      m.pontos >=1 ? "points-1" : "points-0";
-      li.className = className;
-
-      let span = document.createElement("span");
-      span.innerHTML = `<strong>${m.youtube}</strong> = ${m.ff} — 🏅 ${m.pontos} pts | 🚫 ${m.faltas} faltas`;
-      li.appendChild(span);
-
-      let btnAdd = document.createElement("button");
-      btnAdd.innerText = "+1 ponto";
-      btnAdd.onclick = () => { addPoint(index); };
-      li.appendChild(btnAdd);
-
-      let btnSub = document.createElement("button");
-      btnSub.innerText = "-1 ponto (falta)";
-      btnSub.onclick = () => { subPoint(index); };
-      li.appendChild(btnSub);
-
-      let btnRemove = document.createElement("button");
-      btnRemove.innerText = "Remover";
-      btnRemove.onclick = () => { removeMember(index); };
-      li.appendChild(btnRemove);
-
-      list.appendChild(li);
-
-      if(m.faltas >=2) {
-        console.warn(`${m.youtube} tem ${m.faltas} faltas!`);
-      }
-    });
-
-    saveData();
-  }
-
-  function addMember() {
-    const yt = document.getElementById("youtube").value;
-    const ff = document.getElementById("ff").value;
-    if(yt && ff) {
-      members.push({youtube: yt, ff: ff, pontos:0, faltas:0});
-      document.getElementById("youtube").value = "";
-      document.getElementById("ff").value = "";
-      showPanel('list');
-      renderList();
-    } else alert("Preencha todos os campos!");
-  }
-
-  function addPoint(index) { members[index].pontos += 1; renderList(); }
-  function subPoint(index) { members[index].pontos = Math.max(0, members[index].pontos-1); members[index].faltas +=1; renderList(); }
-  function removeMember(index) { if(confirm("Remover este membro?")) { members.splice(index,1); renderList(); } }
-  function resetPoints() { if(confirm("Zerar pontos e faltas?")) { members.forEach(m=>{m.pontos=0; m.faltas=0}); renderList(); } }
-
-  // Exportar dados para arquivo JSON
-  function exportData() {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(members));
-    const dlAnchor = document.createElement('a');
-    dlAnchor.setAttribute("href", dataStr);
-    dlAnchor.setAttribute("download", "guilda_members.json");
-    dlAnchor.click();
-  }
-
-  // Importar dados de arquivo JSON
-  function importData() {
-    const fileInput = document.getElementById("importFile");
-    if(fileInput.files.length === 0) { alert("Selecione um arquivo JSON"); return; }
-    const file = fileInput.files[0];
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      try {
-        members = JSON.parse(e.target.result);
-        renderList();
-      } catch(err) { alert("Arquivo inválido"); }
+      const rankClasses = ["rank-2","rank-1","rank-3"];
+      top.forEach((m, i) => {
+        const card = document.createElement("div");
+        card.className = `rank-card ${rankClasses[i]}`;
+        card.innerHTML = `
+          <img src="https://placedog.net/80/80?random=${i}" alt="Doggo">
+          <div><strong>${m.ff}</strong></div>
+          <div>${m.yt}</div>
+          <div>${m.pontos} pts | Faltas: ${m.faltas}</div>
+        `;
+        container.appendChild(card);
+      });
     }
-    reader.readAsText(file);
-  }
 
-  renderList();
-</script>
+    function renderMembers() {
+      const list = document.getElementById("memberList");
+      list.innerHTML = "<h2>Lista de Membros</h2>";
 
+      members.forEach((m, index) => {
+        const div = document.createElement("div");
+        div.className = "member";
+        div.innerHTML = `
+          <span>${m.ff} (${m.yt})</span>
+          <span>
+            ${m.pontos} pts | Faltas: ${m.faltas}
+            <span class="buttons">
+              <button onclick="addPoint(${index})">+P</button>
+              <button onclick="removePoint(${index})">-P</button>
+              <button onclick="addFalta(${index})">+F</button>
+              <button onclick="removeFalta(${index})">-F</button>
+            </span>
+          </span>
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    function addPoint(i){ members[i].pontos++; updateDashboard(); }
+    function removePoint(i){ if(members[i].pontos>0) members[i].pontos--; updateDashboard(); }
+    function addFalta(i){ members[i].faltas++; updateDashboard(); }
+    function removeFalta(i){ if(members[i].faltas>0) members[i].faltas--; updateDashboard(); }
+
+    function updateDashboard() {
+      renderTop3();
+      renderMembers();
+      // Aqui você pode adicionar Local Storage se quiser salvar alterações
+    }
+
+    // Inicializa dashboard
+    updateDashboard();
+  </script>
 </body>
-
 </html>
-
