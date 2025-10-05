@@ -56,13 +56,35 @@
 <script>
   // Inicializar membros do Local Storage ou usar padrão
   let members = JSON.parse(localStorage.getItem("guildaMembers")) || [
-    {youtube:"jorgin", ff:"jorgin", pontos:4, faltas:0},
-    {youtube:"Espanca véia", ff:"MK Fivem", pontos:3, faltas:0},
-    {youtube:"Coringa", ff:"tiago", pontos:3, faltas:0},
-    {youtube:"Warlinxt", ff:"warley felipe", pontos:4, faltas:0},
-    {youtube:"Drackz", ff:"C99 drackz", pontos:3, faltas:0},
-    {youtube:"26", ff:"Diego26", pontos:4, faltas:0}
-  ];
+  {"ff":"jorgin", "yt":"jorgin", "pontos":4, "faltas":0},
+  {"ff":"Espanca véia", "yt":"MK Fivem", "pontos":3, "faltas":0},
+  {"ff":"Coringa", "yt":"tiago", "pontos":3, "faltas":0},
+  {"ff":"Warlinxt", "yt":"warley felipe", "pontos":4, "faltas":0},
+  {"ff":"Drackz", "yt":"C99 drackz", "pontos":3, "faltas":0},
+  {"ff":"26", "yt":"Diego26", "pontos":4, "faltas":0},
+  {"ff":"Henzao", "yt":"henzo", "pontos":2, "faltas":0},
+  {"ff":"Rochazx", "yt":"Rochazx13", "pontos":4, "faltas":0},
+  {"ff":"Bieuh N1", "yt":"Sr Been", "pontos":4, "faltas":0},
+  {"ff":"enrico", "yt":"henriqrwz", "pontos":4, "faltas":0},
+  {"ff":"kennedy", "yt":"kennedy", "pontos":3, "faltas":0},
+  {"ff":"DN 99", "yt":"Dn 99", "pontos":3, "faltas":0},
+  {"ff":"finest", "yt":"finest", "pontos":2, "faltas":0},
+  {"ff":"Duzin 244", "yt":"josé", "pontos":2, "faltas":0},
+  {"ff":"nome japonês", "yt":"dgking", "pontos":1, "faltas":0},
+  {"ff":"mestre", "yt":"felipe ytb", "pontos":1, "faltas":0},
+  {"ff":"Mano nj11", "yt":"muleke de vila", "pontos":2, "faltas":0},
+  {"ff":"Hades", "yt":"felippe", "pontos":2, "faltas":0},
+  {"ff":"skaltz", "yt":"skalt7x", "pontos":2, "faltas":0},
+  {"ff":"maranha", "yt":"rhuan", "pontos":2, "faltas":0},
+  {"ff":"fx anderson", "yt":"anderson", "pontos":1, "faltas":0},
+  {"ff":"jpzin", "yt":"pedro", "pontos":1, "faltas":0},
+  {"ff":"soares", "yt":"luan", "pontos":1, "faltas":0},
+  {"ff":"henry", "yt":"emerson", "pontos":1, "faltas":0},
+  {"ff":"p.henry", "yt":"henry", "pontos":1, "faltas":0},
+  {"ff":"negrini", "yt":"negrini", "pontos":1, "faltas":0},
+  {"ff":"Br trem", "yt":"trem bala", "pontos":1, "faltas":0}
+]
+;
 
   function saveData() {
     localStorage.setItem("guildaMembers", JSON.stringify(members));
@@ -159,4 +181,5 @@
 </script>
 
 </body>
+
 </html>
