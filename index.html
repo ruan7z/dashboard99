@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard Canil 99</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    header {
+      padding: 20px;
+      background-color: #0a2264;
+      color: white;
+      font-size: 2em;
+      text-shadow: 2px 2px #00000033;
+    }
+    h2 { margin-top:0; }
+
+    .ranking, .members {
+      border-radius: 15px;
+      padding: 15px;
+      margin: 10px auto;
+      max-width: 700px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    /* Rank cards */
+    .rank-card {
+      display: inline-block;
+      border-radius: 15px;
+      padding: 10px;
+      width: 120px;
+      margin: 0 10px;
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+      font-size: 0.9em;
+      color: white;
+    }
+    .rank-card:hover {
+      transform: scale(1.2) rotate(-5deg);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    }
+    .rank-card img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      margin-bottom: 5px;
+    }
+
+    /* Member list */
+    .member {
+      display: flex;
+      justify-content: space-between;
+      padding: 5px;
+      font-size: 0.9em;
+      transition: transform 0.2s, background 0.2s;
+    }
+    .member:hover {
+      background: #83e037;
+      transform: scale(1.02);
+    }
+
+    .buttons button {
+      margin-left: 5px;
+      padding: 2px 5px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .buttons button:hover { opacity: 0.8; }
+  </style>
+</head>
+<body>
+  <header>🐶 Dashboard Canil 99 🐾</header>
+
+  <!-- Seção Top 3 -->
+  <div style="background-color:#191a1a; padding:20px;">
+    <section class="ranking" id="top3"></section>
+  </div>
+
+  <!-- Seção Lista de membros -->
+  <div style="background-color:#191a1a; padding:20px; color:white;">
+    <section class="members" id="memberList">
+      <h2>👥 Lista de Membros</h2>
+    </section>
+  </div>
+
+  <!-- Seção extra -->
+  <div style="background-color:#191a1a; padding:20px;">
+    <!-- Pode colocar estatísticas futuras aqui -->
+  </div>
+
+  <script>
+    let members = [
+      {ff:"jorgin", yt:"jorgin", pontos:4, faltas:0},
+      {ff:"Espanca veia", yt:"MK Fivem", pontos:3, faltas:0},
+      {ff:"Coringa", yt:"tiago", pontos:3, faltas:0},
+      {ff:"Warlinxt", yt:"warley felipe", pontos:4, faltas:0},
+      {ff:"Drackz", yt:"C99 drackz", pontos:3, faltas:0},
+      {ff:"26", yt:"Diego26", pontos:4, faltas:0},
+      {ff:"Henzao", yt:"henzo", pontos:2, faltas:0},
+      {ff:"Rochazx", yt:"Rochazx13", pontos:4, faltas:0},
+      {ff:"Bieuh N1", yt:"Sr Been", pontos:4, faltas:0},
+      {ff:"enrico", yt:"henriqrwz", pontos:4, faltas:0},
+      {ff:"kennedy", yt:"kennedy", pontos:3, faltas:0},
+      {ff:"DN 99", yt:"Dn 99", pontos:3, faltas:0},
+      {ff:"finest", yt:"finest", pontos:2, faltas:0},
+      {ff:"Duzin 244", yt:"jose", pontos:2, faltas:0},
+      {ff:"nome japones", yt:"dgking", pontos:1, faltas:0},
+      {ff:"mestre", yt:"felipe ytb", pontos:1, faltas:0},
+      {ff:"Mano nj11", yt:"muleke de vila", pontos:2, faltas:0},
+      {ff:"Hades", yt:"felippe", pontos:2, faltas:0},
+      {ff:"skaltz", yt:"skalt7x", pontos:2, faltas:0},
+      {ff:"maranha", yt:"rhuan", pontos:2, faltas:0},
+      {ff:"fx anderson", yt:"anderson", pontos:1, faltas:0},
+      {ff:"jpzin", yt:"pedro", pontos:1, faltas:0},
+      {ff:"soares", yt:"luan", pontos:1, faltas:0},
+      {ff:"henry", yt:"emerson", pontos:1, faltas:0},
+      {ff:"p.henry", yt:"henry", pontos:1, faltas:0},
+      {ff:"negrini", yt:"negrini", pontos:1, faltas:0},
+      {ff:"Br trem", yt:"trem bala", pontos:1, faltas:0}
+    ];
+
+    function renderTop3() {
+      const container = document.getElementById("top3");
+      container.innerHTML = "";
+      let top = [...members].sort((a,b)=>b.pontos-a.pontos || a.faltas-b.faltas).slice(0,3);
+
+      const colors = ["#ffa500","#C0C0C0","#CD7F32"]; // Cinza, Azul, Verde
+      top.forEach((m,i)=>{
+        const card = document.createElement("div");
+        card.className="rank-card";
+        card.style.backgroundColor = colors[i];
+        card.innerHTML = `
+          <div>#${i+1}</div>
+          <img src="https://placedog.net/80/80?random=${i}" alt="Doggo">
+          <div>🐾 <strong>${m.ff}</strong></div>
+          <div>🎥 ${m.yt}</div>
+          <div>⭐ ${m.pontos} pts | ❌ ${m.faltas} faltas</div>
+        `;
+        container.appendChild(card);
+      });
+      return top;
+    }
+
+    function renderMembers() {
+      const list = document.getElementById("memberList");
+      list.innerHTML = "<h2>👥 Lista de Membros</h2>";
+      let top3 = renderTop3();
+      let others = members.filter(m => !top3.includes(m));
+      others.sort((a,b)=>b.pontos-a.pontos || a.faltas-b.faltas);
+
+      others.forEach((m,i)=>{
+        const div = document.createElement("div");
+        div.className="member";
+        div.innerHTML = `
+          <span>#${i+4} 🐶 ${m.ff} (${m.yt})</span>
+          <span>⭐ ${m.pontos} | ❌ ${m.faltas}
+            <span class="buttons">
+              <button onclick="addPoint(${members.indexOf(m)})">+P</button>
+              <button onclick="removePoint(${members.indexOf(m)})">-P</button>
+              <button onclick="addFalta(${members.indexOf(m)})">+F</button>
+              <button onclick="removeFalta(${members.indexOf(m)})">-F</button>
+              <button onclick="editFF(${members.indexOf(m)})">✏️ FF</button>
+              <button onclick="editYT(${members.indexOf(m)})">✏️ YT</button>
+              <button onclick="removeMember(${members.indexOf(m)})">🗑️</button>
+            </span>
+          </span>
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    function addPoint(i){ members[i].pontos++; updateDashboard(); }
+    function removePoint(i){ if(members[i].pontos>0) members[i].pontos--; updateDashboard(); }
+    function addFalta(i){ members[i].faltas++; updateDashboard(); }
+    function removeFalta(i){ if(members[i].faltas>0) members[i].faltas--; updateDashboard(); }
+    function editFF(i){ let newFF = prompt("Digite o novo nome do FF:", members[i].ff); if(newFF) members[i].ff=newFF; updateDashboard(); }
+    function editYT(i){ let newYT = prompt("Digite o novo nome do YouTube:", members[i].yt); if(newYT) members[i].yt=newYT; updateDashboard(); }
+    function removeMember(i){ if(confirm(`Remover ${members[i].ff}?`)){ members.splice(i,1); updateDashboard(); } }
+    function addMember(){ let ff=prompt("Nome FF do novo membro:"); let yt=prompt("Nome YouTube do novo membro:"); if(ff&&yt){ members.push({ff,yt,pontos:0,faltas:0}); updateDashboard(); } }
+
+    function updateDashboard(){ renderTop3(); renderMembers(); }
+
+    // Inicializa
+    updateDashboard();
+
+    // Botão fixo para adicionar membro
+    const addBtn = document.createElement("button");
+    addBtn.innerText = "➕ Adicionar Membro";
+    addBtn.style.padding = "10px 20px";
+    addBtn.style.margin = "10px";
+    addBtn.style.fontSize = "1em";
+    addBtn.style.cursor = "pointer";
+    addBtn.onclick = addMember;
+    document.body.insertBefore(addBtn, document.getElementById("top3"));
+  </script>
+</body>
+</html>
